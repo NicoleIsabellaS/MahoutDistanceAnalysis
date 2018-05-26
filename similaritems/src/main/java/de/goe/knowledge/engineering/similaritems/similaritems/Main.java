@@ -23,59 +23,54 @@ public class Main {
 			FileNotFoundException, IOException, IllegalAccessException, InstantiationException, InterruptedException {
 		
 		// MIMICIII DATASET
-		String cos = "cos";
+		String db = "yourDB";
 		Distances distancePerformanceMimic = new Distances();
-		distancePerformanceMimic.createVector("sys.patients_nicole", cos);
+		distancePerformanceMimic.createVector("sys.patients", db);
 
 		System.out.println("STARTING EuclideanDistanceMeasure");
-		distancePerformanceMimic.calcDistance(new EuclideanDistanceMeasure(),
-		"sys.patients_nicole", cos);
+		distancePerformanceMimic.calcDistance(new EuclideanDistanceMeasure(),"sys.patients_nicole", db);
 		
 		System.out.println("STARTING SquaredEuclideanDistanceMeasure");
-		distancePerformanceMimic.calcDistance(new SquaredEuclideanDistanceMeasure(),
-		"sys.patients_nicole",cos);
+		distancePerformanceMimic.calcDistance(new SquaredEuclideanDistanceMeasure(),"sys.patients_nicole",db);
 		
 		System.out.println(" STARTING ManhattanDistanceMeasure");
-		distancePerformanceMimic.calcDistance(new ManhattanDistanceMeasure(),"sys.patients_nicole",cos);
+		distancePerformanceMimic.calcDistance(new ManhattanDistanceMeasure(),"sys.patients",db);
 
 		System.out.println("STARTING MinkowskiDistanceMeasure");
-		distancePerformanceMimic.calcDistance(new MinkowskiDistanceMeasure(),"sys.patients_nicole",cos);
+		distancePerformanceMimic.calcDistance(new MinkowskiDistanceMeasure(),"sys.patients",db);
 		
 		System.out.println("STARTING CosineDistanceMeasure");
-		distancePerformanceMimic.calcDistance(new CosineDistanceMeasure(),"sys.patients_nicole",cos);
+		distancePerformanceMimic.calcDistance(new CosineDistanceMeasure(),"sys.patients",db);
 
 		System.out.println("STARTING TanimotoDistanceMeasure");
-		distancePerformanceMimic.calcDistance(new TanimotoDistanceMeasure(),"sys.patients_nicole",cos);
+		distancePerformanceMimic.calcDistance(new TanimotoDistanceMeasure(),"sys.patients",db);
 
 		System.out.println("STARTING ChebyshevDistanceMeasure");
-		distancePerformanceMimic.calcDistance(new ChebyshevDistanceMeasure(),"sys.patients_nicole",cos);
+		distancePerformanceMimic.calcDistance(new ChebyshevDistanceMeasure(),"sys.patients",db);
 
 		// MIMICIII LSH
 		System.out.println("MIMIC STARTING LSH!");
 
 		LocSenHash lshMimic = new LocSenHash(distancePerformanceMimic.getFinalVectorMap());
-		lshMimic.executeLSH(new EuclideanDistanceMeasure(), distancePerformanceMimic.getAdmissionPatientMap(), "sys.patients_nicole");
-		lshMimic.executeLSH(new SquaredEuclideanDistanceMeasure(),distancePerformanceMimic.getAdmissionPatientMap(),"sys.patients_nicole");
-		lshMimic.executeLSH(new ManhattanDistanceMeasure(),distancePerformanceMimic.getAdmissionPatientMap(), "sys.patients_nicole");
-		lshMimic.executeLSH(new MinkowskiDistanceMeasure(), distancePerformanceMimic.getAdmissionPatientMap(), "sys.patients_nicole");
-		lshMimic.executeLSH(new CosineDistanceMeasure(),distancePerformanceMimic.getAdmissionPatientMap(), "sys.patients_nicole");
-		lshMimic.executeLSH(new TanimotoDistanceMeasure(),distancePerformanceMimic.getAdmissionPatientMap(), "sys.patients_nicole");
-		lshMimic.executeLSH(new ChebyshevDistanceMeasure(),distancePerformanceMimic.getAdmissionPatientMap(), "sys.patients_nicole");
+		lshMimic.executeLSH(new EuclideanDistanceMeasure(), distancePerformanceMimic.getAdmissionPatientMap(), "sys.patients");
+		lshMimic.executeLSH(new SquaredEuclideanDistanceMeasure(),distancePerformanceMimic.getAdmissionPatientMap(),"sys.patients");
+		lshMimic.executeLSH(new ManhattanDistanceMeasure(),distancePerformanceMimic.getAdmissionPatientMap(), "sys.patients");
+		lshMimic.executeLSH(new MinkowskiDistanceMeasure(), distancePerformanceMimic.getAdmissionPatientMap(), "sys.patients");
+		lshMimic.executeLSH(new CosineDistanceMeasure(),distancePerformanceMimic.getAdmissionPatientMap(), "sys.patients");
+		lshMimic.executeLSH(new TanimotoDistanceMeasure(),distancePerformanceMimic.getAdmissionPatientMap(), "sys.patients");
+		lshMimic.executeLSH(new ChebyshevDistanceMeasure(),distancePerformanceMimic.getAdmissionPatientMap(), "sys.patients");
 
 		// DIABETES DATASET
 		//String dia = "diabetes";
 		//Distances distancePerformanceDiabetes = new Distances();
-		//distancePerformanceDiabetes.createVector("sys.diabetes_nicole", dia);
+		//distancePerformanceDiabetes.createVector("sys.diabetes", dia);
 
-		//LocSenHash lshDia = new LocSenHash(distancePerformanceDiabetes.getFinalVectorMap());
-		//lshDia.executeLSH(new EuclideanDistanceMeasure(), distancePerformanceDiabetes.getAdmissionPatientMap(),"sys.diabetes_nicole");
-
-		//distancePerformanceDiabetes.calcDistance(new EuclideanDistanceMeasure(), "diabetes_nicole", dia);
-		//distancePerformanceDiabetes.calcDistance(new SquaredEuclideanDistanceMeasure(), "diabetes_nicole", dia);
-		//distancePerformanceDiabetes.calcDistance(new ManhattanDistanceMeasure(), "diabetes_nicole", dia);
-		//distancePerformanceDiabetes.calcDistance(new MinkowskiDistanceMeasure(), "diabetes_nicole", dia);
-		//distancePerformanceDiabetes.calcDistance(new CosineDistanceMeasure(), "diabetes_nicole", dia);
-		//distancePerformanceDiabetes.calcDistance(new TanimotoDistanceMeasure(), "diabetes_nicole", dia);
-		//distancePerformanceDiabetes.calcDistance(new ChebyshevDistanceMeasure(), "diabetes_nicole", dia);
+		//distancePerformanceDiabetes.calcDistance(new EuclideanDistanceMeasure(), "diabetes", dia);
+		//distancePerformanceDiabetes.calcDistance(new SquaredEuclideanDistanceMeasure(), "diabetes", dia);
+		//distancePerformanceDiabetes.calcDistance(new ManhattanDistanceMeasure(), "diabetes", dia);
+		//distancePerformanceDiabetes.calcDistance(new MinkowskiDistanceMeasure(), "diabetes", dia);
+		//distancePerformanceDiabetes.calcDistance(new CosineDistanceMeasure(), "diabetes", dia);
+		//distancePerformanceDiabetes.calcDistance(new TanimotoDistanceMeasure(), "diabetes", dia);
+		//distancePerformanceDiabetes.calcDistance(new ChebyshevDistanceMeasure(), "diabetes", dia);
 	}
 }
