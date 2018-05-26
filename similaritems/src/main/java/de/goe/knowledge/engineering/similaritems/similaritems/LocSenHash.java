@@ -83,7 +83,6 @@ public class LocSenHash {
 			List<WeightedThing<Vector>> results = lsh.search((Vector) entry.getValue(), 160);
 			int priority = 0;
 
-			//System.out.println("I failed before loop");
 			for (WeightedThing<Vector> result : results) {
 				DenseVector v = (DenseVector) result.getValue();
 
@@ -91,12 +90,7 @@ public class LocSenHash {
 				int vectorComparedWith = map
 						.get(Integer.parseInt(getKey(vectors, v).toString().replaceAll("\\p{P}", "")));
 
-				//System.out.println("I failed after vectorComparedWith");
 				if (vectorKey != vectorComparedWith) {
-					// String queryInsert = "INSERT INTO " + dataset + " VALUES (" + vectorKey + ",
-					// " + vectorComparedWith
-					// + ")";
-					//System.out.println("I FAILED HERE before writer");
 					writer.write(vectorKey + "," + vectorComparedWith + "," + priority + "\n");
 				}
 				priority++;
