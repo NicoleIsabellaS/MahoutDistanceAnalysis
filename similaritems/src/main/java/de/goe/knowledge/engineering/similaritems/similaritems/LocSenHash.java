@@ -47,7 +47,7 @@ public class LocSenHash {
 		lsh.addAll(data);
 
 		Class.forName("nl.cwi.monetdb.jdbc.MonetDriver");
-		Connection con = DriverManager.getConnection("jdbc:monetdb://localhost/cos", "monetdb", "monetdb");
+		Connection con = DriverManager.getConnection("jdbc:monetdb://localhost/database", "user", "pw");
 		Statement stat = con.createStatement();
 		String dataset = source + "_LSH_" + dist.getClass().getSimpleName();
 		String query = "CREATE TABLE " + dataset + " (id_1 int, id_2 int, priority double)";
