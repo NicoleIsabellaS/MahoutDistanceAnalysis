@@ -46,7 +46,7 @@ public class Distances {
 		Class.forName("nl.cwi.monetdb.jdbc.MonetDriver");
 
 		// DB connection and fetching
-		Connection con = DriverManager.getConnection("jdbc:monetdb://localhost/" + fromDB, "monetdb", "monetdb");
+		Connection con = DriverManager.getConnection("jdbc:monetdb://localhost/" + fromDB, "user", "pw");
 		PreparedStatement st = con.prepareStatement("SELECT * FROM " + database);
 		ResultSet rs;
 
@@ -272,7 +272,7 @@ public class Distances {
 			throws SQLException, ClassNotFoundException, UnsupportedEncodingException, FileNotFoundException,
 			IOException, InterruptedException {
 		Class.forName("nl.cwi.monetdb.jdbc.MonetDriver");
-		Connection con = DriverManager.getConnection("jdbc:monetdb://localhost/" + fromDB, "monetdb", "monetdb");
+		Connection con = DriverManager.getConnection("jdbc:monetdb://localhost/" + fromDB, "user", "pw");
 		Statement stat = con.createStatement();
 		String dataset = data + "_" + dist.getClass().getSimpleName();
 		String query = "CREATE TABLE " + dataset + " (id_1 int, id_2 int," + dist.getClass().getSimpleName()
