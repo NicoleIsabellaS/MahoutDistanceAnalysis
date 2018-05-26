@@ -26,18 +26,18 @@ public class DistancesThread extends Thread {
 			Class.forName("nl.cwi.monetdb.jdbc.MonetDriver");
 			Connection con = DriverManager.getConnection("jdbc:monetdb://localhost/" + fromDB, "user", "pw");
 			Statement stmt = con.createStatement();
-			String queryInsert = "COPY INTO " + dataset + " FROM '/sarna/eclipse-workspace/similaritems/output/"
+			String queryInsert = "COPY INTO " + dataset + " FROM '/your/global/csv/path/"
 					+ dataset + "_" + counter + ".csv' USING DELIMITERS ',','\n','\"';";
 			stmt.execute(queryInsert);
 			con.close();
 
-			//Files.delete(Paths.get("output/" + dataset + "_" + counter + ".csv"));
+			Files.delete(Paths.get("output/" + dataset + "_" + counter + ".csv"));
 			System.out.println("=> DELETED FILE " + dataset + "_" + counter + ".csv");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.exit(1);
-//		} catch (IOException e) {
-//			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
