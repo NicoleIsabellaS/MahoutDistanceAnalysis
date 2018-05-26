@@ -27,32 +27,30 @@ public class Main {
 		Distances distancePerformanceMimic = new Distances();
 		distancePerformanceMimic.createVector("sys.patients_nicole", cos);
 
-		// System.out.println("STARTING EuclideanDistanceMeasure");
-		 //distancePerformanceMimic.calcDistance(new EuclideanDistanceMeasure(),
-		 //"sys.patients_nicole", cos);
+		System.out.println("STARTING EuclideanDistanceMeasure");
+		distancePerformanceMimic.calcDistance(new EuclideanDistanceMeasure(),
+		"sys.patients_nicole", cos);
 		
-		 //System.out.println("STARTING SquaredEuclideanDistanceMeasure");
-		 //distancePerformanceMimic.calcDistance(new SquaredEuclideanDistanceMeasure(),
-		 //"sys.patients_nicole",cos);
+		System.out.println("STARTING SquaredEuclideanDistanceMeasure");
+		distancePerformanceMimic.calcDistance(new SquaredEuclideanDistanceMeasure(),
+		"sys.patients_nicole",cos);
 		
-		 //System.out.println(" STARTING ManhattanDistanceMeasure");
-		 //distancePerformanceMimic.calcDistance(new ManhattanDistanceMeasure(),"sys.patients_nicole",cos);
+		System.out.println(" STARTING ManhattanDistanceMeasure");
+		distancePerformanceMimic.calcDistance(new ManhattanDistanceMeasure(),"sys.patients_nicole",cos);
 
-		 //System.out.println("STARTING MinkowskiDistanceMeasure");
-		 //distancePerformanceMimic.calcDistance(new MinkowskiDistanceMeasure(),"sys.patients_nicole",cos);
+		System.out.println("STARTING MinkowskiDistanceMeasure");
+		distancePerformanceMimic.calcDistance(new MinkowskiDistanceMeasure(),"sys.patients_nicole",cos);
 		
-		 //System.out.println("STARTING CosineDistanceMeasure");
-		 //distancePerformanceMimic.calcDistance(new CosineDistanceMeasure(),"sys.patients_nicole",cos);
+		System.out.println("STARTING CosineDistanceMeasure");
+		distancePerformanceMimic.calcDistance(new CosineDistanceMeasure(),"sys.patients_nicole",cos);
 
-		// distancePerformanceMimic.calcDistance(new
-		// MahalanobisDistanceMeasure(),"sys.patients_nicole");
+		System.out.println("STARTING TanimotoDistanceMeasure");
+		distancePerformanceMimic.calcDistance(new TanimotoDistanceMeasure(),"sys.patients_nicole",cos);
 
-		 //System.out.println("STARTING TanimotoDistanceMeasure");
-		 //distancePerformanceMimic.calcDistance(new TanimotoDistanceMeasure(),"sys.patients_nicole",cos);
+		System.out.println("STARTING ChebyshevDistanceMeasure");
+		distancePerformanceMimic.calcDistance(new ChebyshevDistanceMeasure(),"sys.patients_nicole",cos);
 
-		 //System.out.println("STARTING ChebyshevDistanceMeasure");
-		 //distancePerformanceMimic.calcDistance(new ChebyshevDistanceMeasure(),"sys.patients_nicole",cos);
-
+		// MIMICIII LSH
 		System.out.println("MIMIC STARTING LSH!");
 
 		LocSenHash lshMimic = new LocSenHash(distancePerformanceMimic.getFinalVectorMap());
@@ -72,15 +70,12 @@ public class Main {
 		//LocSenHash lshDia = new LocSenHash(distancePerformanceDiabetes.getFinalVectorMap());
 		//lshDia.executeLSH(new EuclideanDistanceMeasure(), distancePerformanceDiabetes.getAdmissionPatientMap(),"sys.diabetes_nicole");
 
-//
-//		distancePerformanceDiabetes.calcDistance(new EuclideanDistanceMeasure(), "diabetes_nicole", dia);
-//		distancePerformanceDiabetes.calcDistance(new SquaredEuclideanDistanceMeasure(), "diabetes_nicole", dia);
-//		distancePerformanceDiabetes.calcDistance(new ManhattanDistanceMeasure(), "diabetes_nicole", dia);
-//		distancePerformanceDiabetes.calcDistance(new MinkowskiDistanceMeasure(), "diabetes_nicole", dia);
-//		distancePerformanceDiabetes.calcDistance(new CosineDistanceMeasure(), "diabetes_nicole", dia);
-//		// distancePerformanceDiabetes.calcDistance(new MahalanobisDistanceMeasure(),
-//		// "monetdb.diabetes");
-//		distancePerformanceDiabetes.calcDistance(new TanimotoDistanceMeasure(), "diabetes_nicole", dia);
-//		distancePerformanceDiabetes.calcDistance(new ChebyshevDistanceMeasure(), "diabetes_nicole", dia);
+		//distancePerformanceDiabetes.calcDistance(new EuclideanDistanceMeasure(), "diabetes_nicole", dia);
+		//distancePerformanceDiabetes.calcDistance(new SquaredEuclideanDistanceMeasure(), "diabetes_nicole", dia);
+		//distancePerformanceDiabetes.calcDistance(new ManhattanDistanceMeasure(), "diabetes_nicole", dia);
+		//distancePerformanceDiabetes.calcDistance(new MinkowskiDistanceMeasure(), "diabetes_nicole", dia);
+		//distancePerformanceDiabetes.calcDistance(new CosineDistanceMeasure(), "diabetes_nicole", dia);
+		//distancePerformanceDiabetes.calcDistance(new TanimotoDistanceMeasure(), "diabetes_nicole", dia);
+		//distancePerformanceDiabetes.calcDistance(new ChebyshevDistanceMeasure(), "diabetes_nicole", dia);
 	}
 }
