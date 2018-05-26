@@ -24,7 +24,7 @@ public class DistancesThread extends Thread {
 	public void run() {
 		try {
 			Class.forName("nl.cwi.monetdb.jdbc.MonetDriver");
-			Connection con = DriverManager.getConnection("jdbc:monetdb://localhost/" + fromDB, "monetdb", "monetdb");
+			Connection con = DriverManager.getConnection("jdbc:monetdb://localhost/" + fromDB, "user", "pw");
 			Statement stmt = con.createStatement();
 			String queryInsert = "COPY INTO " + dataset + " FROM '/sarna/eclipse-workspace/similaritems/output/"
 					+ dataset + "_" + counter + ".csv' USING DELIMITERS ',','\n','\"';";
