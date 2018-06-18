@@ -21,7 +21,46 @@ import org.apache.mahout.common.distance.TanimotoDistanceMeasure;
 public class Main {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, UnsupportedEncodingException,
 			FileNotFoundException, IOException, IllegalAccessException, InstantiationException, InterruptedException {
-		
+		// Distances distancePerformanceMimic = new Distances();
+		// long startTime = System.nanoTime();
+		// distancePerformanceMimic.createVector("MIMICIII.PATIENTS");
+
+		// distancePerformanceMimic.calcDistance(new EuclideanDistanceMeasure(),
+		// "mimiciii.patients");
+		// long eucStopTime = System.nanoTime();
+		// long eucDuration = eucStopTime - startTime;
+		// final double eucMinutes = ((double) eucDuration * 0.0000000000166667);
+		// System.out.println("Euclidean took " + new
+		// DecimalFormat("#.##########").format(eucMinutes) + " min");
+
+		// distancePerformanceMimic.calcDistance(new CosineDistanceMeasure(),
+		// "mimiciii.patients");
+		// long cosStopTime = System.nanoTime();
+		// long cosDuration = cosStopTime - startTime;
+		// final double cosMinutes = ((double) cosDuration * 0.0000000000166667);
+		// System.out.println("Cosine took " + new
+		// DecimalFormat("#.##########").format(cosMinutes) + " min");
+
+		ElkiDistances distancePerformanceElki = new ElkiDistances<>();
+		long startTime_ELKI = System.nanoTime();
+		distancePerformanceElki.createVector("MIMICIII.PATIENTS");
+
+		distancePerformanceElki.calcDistance(new CosineDistanceFunction(), "mimiciii.patients");
+		long cosStopTime_ELKI = System.nanoTime();
+		long cosDuration_ELKI = cosStopTime_ELKI - startTime_ELKI;
+		final double cosMinutes_ELKI = ((double) cosDuration_ELKI * 0.0000000000166667);
+		System.out.println("Cosine took " + new DecimalFormat("#.##########").format(cosMinutes_ELKI) + " min");
+
+		// distancePerformanceElki.calcDistance(new CosineDistanceFunction(),
+		// "mimiciii.patients");
+		// long eucStopTime_ELKI = System.nanoTime();
+		// long eucDuration_ELKI = eucStopTime_ELKI - startTime_ELKI;
+		// final double eucMinutes_ELKI = ((double) eucDuration_ELKI *
+		// 0.0000000000166667);
+		// System.out.println("Euclidean took " + new
+		// DecimalFormat("#.##########").format(eucMinutes_ELKI) + " min");
+				
+				
 		// MIMICIII DATASET
 		String db = "yourDB";
 		Distances distancePerformanceMimic = new Distances();
