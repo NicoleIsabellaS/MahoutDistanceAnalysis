@@ -1,4 +1,4 @@
-package de.goe.knowledge.engineering.similaritems;
+package de.goe.knowledge.engineering.similaritems.similaritems;
 
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -28,6 +28,7 @@ public class ElkiDistances<O> {
 
 	Map<Integer, Vector> finalVectorMap = new HashMap<Integer, Vector>();
 	Map<Integer, Integer> admissionPatientMap = new HashMap<Integer, Integer>();
+	int compNumOfVec;
 
 	public Map<Integer, Vector> getFinalVectorMap() {
 		return finalVectorMap;
@@ -37,16 +38,19 @@ public class ElkiDistances<O> {
 		return admissionPatientMap;
 	}
 
-	public Map<Integer, Vector> createVector(String database) throws SQLException, ClassNotFoundException {
+	public Map<Integer, Vector> createVector(String database, String fromDB)
+			throws SQLException, ClassNotFoundException {
 		// DB connection and fetching
-		Connection con = DriverManager.getConnection("jdbc:monetdb://localhost/demo", "monetdb", "monetdb");
-		PreparedStatement st = con.prepareStatement("SELECT * FROM " + database + " LIMIT 5");
+		Class.forName("nl.cwi.monetdb.jdbc.MonetDriver");
+
+		// DB connection and fetching
+		Connection con = DriverManager.getConnection("jdbc:monetdb://localhost/" + fromDB, "monetdb", "monetdb");
+		PreparedStatement st = con.prepareStatement("SELECT * FROM " + database);
 		ResultSet rs;
 
 		rs = st.executeQuery();
 		ResultSetMetaData md = rs.getMetaData();
 		int rowNumber = 0;
-		int i = 0;
 
 		// Vectors and mapping
 		while (rs.next()) {
@@ -135,15 +139,13 @@ public class ElkiDistances<O> {
 		vectorValues[70] = rs.getInt("gender");
 		vectorValues[71] = rs.getDouble("vent");
 		vectorValues[72] = rs.getDouble("gcs");
-		vectorValues[73] = rs.getInt("icd9_numeric");
-		vectorValues[74] = rs.getDouble("vasopressor");
+		vectorValues[73] = rs.getDouble("vasopressor");
 		return vectorValues;
 	}
 
 	public Map<Integer, Vector> getChunksFrom(int currentID)
 			throws UnsupportedEncodingException, FileNotFoundException, IOException {
 		Map<Integer, Vector> chunkingVectors = new HashMap<>();
-		int compNumOfVec;
 		int id = 1;
 		int joinID = 1;
 
@@ -193,19 +195,26 @@ public class ElkiDistances<O> {
 		return chunkingVectors;
 	}
 
-	public void calcDistance(PrimitiveDistanceFunction<NumberVector> dist, String data) throws ClassNotFoundException,
-			UnsupportedEncodingException, FileNotFoundException, IOException, InterruptedException, SQLException {
-		Connection con = DriverManager.getConnection("jdbc:monetdb://localhost/demo", "monetdb", "monetdb");
+	public void calcDistance(PrimitiveDistanceFunction<NumberVector> dist, String data, String fromDB)
+			throws ClassNotFoundException, UnsupportedEncodingException, FileNotFoundException, IOException,
+			InterruptedException, SQLException {
+		Class.forName("nl.cwi.monetdb.jdbc.MonetDriver");
+		Connection con = DriverManager.getConnection("jdbc:monetdb://localhost/" + fromDB, "monetdb", "monetdb");
 		Statement stat = con.createStatement();
-		String dataset = data + "_elki_" + dist.getClass().getSimpleName();
+		String dataset = data + "nicole_elki_" + dist.getClass().getSimpleName();
 		String query = "CREATE TABLE " + dataset + " (id_1 int, id_2 int," + dist.getClass().getSimpleName()
 				+ " double precision)";
 		try {
 			stat.execute(query);
 		} catch (SQLException e) {
 			System.out.println(query + ": " + e.getMessage());
+			String dropQuery = "DROP TABLE " + dataset;
+			stat.execute(dropQuery);
+			stat.close();
+			System.out.println("Restart " + dataset);
 			System.exit(1);
 		}
+
 		con.close();
 
 		long startTime = System.nanoTime();
@@ -231,10 +240,9 @@ public class ElkiDistances<O> {
 						+ dist.distance((NumberVector) pair.getValue(), (NumberVector) e.getValue()) + "\n");
 			}
 			currentID++;
-			if (i == 1000000) {
+			if (i == (100 * compNumOfVec)) {
 				writer.close();
-
-				DistancesThread t = new DistancesThread(admissionPatientMap, dataset, counter - 1);
+				DistancesThread t = new DistancesThread(startTime, dataset, counter - 1, fromDB);
 				t.start();
 				t.join();
 				i = 0;
@@ -245,7 +253,7 @@ public class ElkiDistances<O> {
 
 		// Necessary for last file which might be less then i
 		writer.close();
-		DistancesThread t = new DistancesThread(admissionPatientMap, dataset, counter - 1);
+		DistancesThread t = new DistancesThread(startTime, dataset, counter - 1, fromDB);
 		t.start();
 		t.join();
 
