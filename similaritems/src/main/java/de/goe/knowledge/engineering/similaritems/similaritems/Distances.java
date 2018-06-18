@@ -1,13 +1,10 @@
 package de.goe.knowledge.engineering.similaritems.similaritems;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.sql.Connection;
@@ -15,7 +12,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
@@ -32,6 +28,7 @@ public class Distances {
 
 	Map<Integer, Vector> finalVectorMap = new HashMap<Integer, Vector>();
 	Map<Integer, Integer> admissionPatientMap = new HashMap<Integer, Integer>();
+	int compNumOfVec;
 
 	public Map<Integer, Vector> getFinalVectorMap() {
 		return finalVectorMap;
@@ -46,14 +43,14 @@ public class Distances {
 		Class.forName("nl.cwi.monetdb.jdbc.MonetDriver");
 
 		// DB connection and fetching
-		Connection con = DriverManager.getConnection("jdbc:monetdb://localhost/" + fromDB, "user", "pw");
+		Connection con = DriverManager.getConnection("jdbc:monetdb://localhost/" + fromDB, "monetdb", "monetdb");
 		PreparedStatement st = con.prepareStatement("SELECT * FROM " + database);
 		ResultSet rs;
 
 		rs = st.executeQuery();
 		ResultSetMetaData md = rs.getMetaData();
 		int rowNumber = 0;
-		
+
 		String uniqueID;
 
 		// Vectors and mapping
@@ -64,7 +61,7 @@ public class Distances {
 
 			if (database.contains("patients")) {
 				vectorValues = setMIMICVec(rs, vectorValues);
-				uniqueID = "icustay_id";
+				uniqueID = "id";
 			} else {
 				vectorValues = setDiabetesVec(rs, vectorValues);
 				uniqueID = "encounter_id";
@@ -72,7 +69,7 @@ public class Distances {
 
 			patientVector.assign(vectorValues);
 			finalVectorMap.put(rowNumber, patientVector);
-			
+
 			admissionPatientMap.put(rowNumber, rs.getInt(uniqueID));
 		}
 		con.close();
@@ -132,40 +129,27 @@ public class Distances {
 		vectorValues[50] = rs.getDouble("temperature_18h_min");
 		vectorValues[51] = rs.getDouble("temperature_24h_min");
 		vectorValues[52] = rs.getDouble("temperature_6h_min");
-		vectorValues[53] = rs.getInt("subject_id");
-		vectorValues[54] = rs.getInt("hadm_id");
-		vectorValues[55] = rs.getDouble("hematocrit_min");
-		vectorValues[56] = rs.getDouble("hematocrit_max");
-		vectorValues[57] = rs.getDouble("wbc_min");
-		vectorValues[58] = rs.getDouble("wbc_max");
-		vectorValues[59] = rs.getDouble("glucose_min");
-		vectorValues[60] = rs.getDouble("glucose_max");
-		vectorValues[61] = rs.getDouble("bicarbonate_min");
-		vectorValues[62] = rs.getDouble("bicarbonate_max");
-		vectorValues[63] = rs.getDouble("potassium_min");
-		vectorValues[64] = rs.getDouble("potassium_max");
-		vectorValues[65] = rs.getDouble("sodium_min");
-		vectorValues[66] = rs.getDouble("sodium_max");
-		vectorValues[67] = rs.getDouble("bun_min");
-		vectorValues[68] = rs.getDouble("bun_max");
-		vectorValues[69] = rs.getDouble("ccreatinine_min");
-		vectorValues[70] = rs.getDouble("creatinine_max");
-		vectorValues[71] = rs.getInt("age");
-		vectorValues[72] = rs.getInt("gender");
-		vectorValues[73] = rs.getInt("admission_type");
-		vectorValues[74] = rs.getInt("service_type");
-		vectorValues[75] = rs.getDouble("vent");
-		vectorValues[76] = rs.getDouble("gcs");
-
-		try {
-			vectorValues[77] = rs.getInt("icd9_code");
-		} catch (SQLDataException e) {
-			if (rs.getInt("icustay_id") == 200044) {
-				vectorValues[77] = 85220;
-			}
-		}
-
-		vectorValues[78] = rs.getDouble("vasopressor");
+		vectorValues[53] = rs.getDouble("hematocrit_min");
+		vectorValues[54] = rs.getDouble("hematocrit_max");
+		vectorValues[55] = rs.getDouble("wbc_min");
+		vectorValues[56] = rs.getDouble("wbc_max");
+		vectorValues[57] = rs.getDouble("glucose_min");
+		vectorValues[58] = rs.getDouble("glucose_max");
+		vectorValues[59] = rs.getDouble("bicarbonate_min");
+		vectorValues[60] = rs.getDouble("bicarbonate_max");
+		vectorValues[61] = rs.getDouble("potassium_min");
+		vectorValues[62] = rs.getDouble("potassium_max");
+		vectorValues[63] = rs.getDouble("sodium_min");
+		vectorValues[64] = rs.getDouble("sodium_max");
+		vectorValues[65] = rs.getDouble("bun_min");
+		vectorValues[66] = rs.getDouble("bun_max");
+		vectorValues[67] = rs.getDouble("ccreatinine_min");
+		vectorValues[68] = rs.getDouble("creatinine_max");
+		vectorValues[69] = rs.getInt("age");
+		vectorValues[70] = rs.getInt("gender");
+		vectorValues[71] = rs.getDouble("vent");
+		vectorValues[72] = rs.getDouble("gcs");
+		vectorValues[73] = rs.getDouble("vasopressor");
 		return vectorValues;
 	}
 
@@ -218,7 +202,6 @@ public class Distances {
 	public Map<Integer, Vector> getChunksFrom(int currentID)
 			throws UnsupportedEncodingException, FileNotFoundException, IOException {
 		Map<Integer, Vector> chunkingVectors = new HashMap<Integer, Vector>();
-		int compNumOfVec;
 		int id = 1;
 		int joinID = 1;
 
@@ -272,9 +255,9 @@ public class Distances {
 			throws SQLException, ClassNotFoundException, UnsupportedEncodingException, FileNotFoundException,
 			IOException, InterruptedException {
 		Class.forName("nl.cwi.monetdb.jdbc.MonetDriver");
-		Connection con = DriverManager.getConnection("jdbc:monetdb://localhost/" + fromDB, "user", "pw");
+		Connection con = DriverManager.getConnection("jdbc:monetdb://localhost/" + fromDB, "monetdb", "monetdb");
 		Statement stat = con.createStatement();
-		String dataset = data + "_" + dist.getClass().getSimpleName();
+		String dataset = data + "_nicole_" + dist.getClass().getSimpleName();
 		String query = "CREATE TABLE " + dataset + " (id_1 int, id_2 int," + dist.getClass().getSimpleName()
 				+ " double precision)";
 		try {
@@ -310,10 +293,12 @@ public class Distances {
 			Entry<?, ?> pair = (Entry<?, ?>) dataMatrix.next();
 			for (Entry<?, ?> e : getChunksFrom(currentID).entrySet()) {
 				writer.write(admissionPatientMap.get(pair.getKey()) + "," + admissionPatientMap.get(e.getKey()) + ","
-						+ dist.distance((DenseVector) pair.getValue(), (DenseVector) e.getValue()) + "\n");
+						+ (1-dist.distance((DenseVector) pair.getValue(), (DenseVector) e.getValue())) + "\n");
 			}
 			currentID++;
-			if (i == 10000) {
+
+			// 100, 50
+			if (i == (100 * compNumOfVec)) {
 				writer.close();
 				DistancesThread t = new DistancesThread(startTime, dataset, counter - 1, fromDB);
 				t.start();
@@ -336,22 +321,5 @@ public class Distances {
 
 		String text = "For " + dataset + " it took " + new DecimalFormat("#.##########").format(minutes) + " min";
 		System.out.println("-> " + text);
-		writeTimeInTEXT(text);
-	}
-
-	public void writeTimeInTEXT(String a) {
-		File log = new File("log.txt");
-		try {
-			if (log.exists() == false) {
-				System.out.println("We had to make a new file.");
-				log.createNewFile();
-			}
-			PrintWriter out = new PrintWriter(new FileWriter(log, true));
-
-			out.append(a + "\n");
-			out.close();
-		} catch (IOException e) {
-			System.out.println("COULD NOT LOG!!");
-		}
 	}
 }
